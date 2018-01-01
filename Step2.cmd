@@ -135,8 +135,9 @@ REM reg delete HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore /v Au
 
 
 REM Copy SetupComplete.cmd to c:\windows\setup\scripts\
-c:\windows\system32\takeown.exe /f ..\Scripts
-c:\windows\system32\icacls.exe ..\Scripts /grant Administrators:(OI)(CI)F /T
+c:\windows\system32\takeown.exe /f ..
+c:\windows\system32\icacls.exe .. /grant Administrators:(OI)(CI)F /T
+mkdir c:\windows\setup\scripts
 copy %~dp0\SetupComplete.cmd c:\windows\setup\scripts\
 copy %~dp0\ErrorHandler.cmd c:\windows\setup\scripts\
 
