@@ -21,6 +21,9 @@ rem :skipreboot
 rem import app associations
 DISM /online /import-defaultappassociations:..\sysprep_scripts\AppAssoc.xml
 
+REM force KMS server activation for win/office
+cscript c:\windows\system32\slmgr.vbs /ato
+cscript c:\Program Files\Microsoft Office\Office16\ospp.vbs /act
 
 rem make sure fog service is enabled
 sc config FOGService start=delayed-auto

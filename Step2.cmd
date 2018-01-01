@@ -72,15 +72,13 @@ rem Export current app defaults so we can import them later
 DISM /online /export-defaultappassociations:AppAssoc.xml
 
 REM PC software - use these keys for win 10 pro and office 2016
-REM cscript c:\windows\system32\slmgr.vbs /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX
-REM cscript 'c:\Program Files\Microsoft Office\Office16\ospp.vbs' /inpkey:XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99
+REM Install public KMS keys for auto activation
+cscript c:\windows\system32\slmgr.vbs /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX
+cscript 'c:\Program Files\Microsoft Office\Office16\ospp.vbs' /inpkey:XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99
 
 REM ---------- SCRATCH -------------------
-rem activate windows with KMS server
-rem install public key
 rem win 10 pro - W269N-WFGWX-YVC9B-4J6C9-T83GX
 rem win 10 enterprise - NPPR9-FWDCX-D2C8J-H872K-2YT43
-REM c:\windows\system32\slmgr.vbs /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX
 rem activate with kms server
 REM c:\windows\system32\slmgr.vbs /ato
 rem view detailed info
@@ -90,7 +88,6 @@ rem enable auto discovery of kms server
 rem slmgr.vbs /ckms
 rem manual activation
 rem slmgr.vbs /skms server:port
-
 
 REM set APP=sysinternalssuite\psexec.exe
 REM set LIST=computer_list_test.txt
@@ -141,12 +138,21 @@ REM Copy SetupComplete.cmd to c:\windows\setup\scripts\
 c:\windows\system32\takeown.exe /f ..\Scripts
 c:\windows\system32\icacls.exe ..\Scripts /grant Administrators:(OI)(CI)F /T
 copy %~dp0\SetupComplete.cmd c:\windows\setup\scripts\
+copy %~dp0\ErrorHandler.cmd c:\windows\setup\scripts\
 
 echo -----------------------------------------------------------------
 echo - NOTE - broken win 10 1709 - will fail on sysprep
-echo - Edit c:\windows\system32\sysprep\actionscripts\generalize.xml
+echo - Edit c:\windows\system32\sysprep\actionfiles\generalize.xml
 echo - Comment out whole section on Appx (from <image to </image> )
 echo -----------------------------------------------------------------
+echo Auto apply fix to generalize.xml?
+choice /C yn /m "Press n for no, or y to auto fix"
+if errorlevel 2 goto skipfixgeneralize
+c:\windows\system32\takeown.exe /f c:\windows\system32\sysprep\actionfiles
+c:\windows\system32\icacls.exe c:\windows\system32\sysprep\actionfiles /grant Administrators:(OI)(CI)F /T
+copy %~dp0\generalize.xml c:\windows\system32\sysprep\actionfiles\generalize.xml
+:skipfixgeneralize
+
 echo
 echo "This will run sysprep and shutdown."
 echo Do you want to run sysprep [recommended]?
