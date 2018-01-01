@@ -50,7 +50,7 @@ rem c:\windows\setup\sysprep_scripts\sdelete\sdelete -z c:
 :skipzero
 
 echo Do you want to run defrag [recommended]?
-choice /C yn /T 6 /D n /m "Press n for no, or y to run defrag"
+choice /C yn /T 6 /D n /m "Press n for no, or y to run defrag - default N in 6 seconds"
 if errorlevel 2 goto skipdefrag
 defrag c: /U /V
 :skipdefrag
@@ -74,7 +74,7 @@ DISM /online /export-defaultappassociations:AppAssoc.xml
 REM PC software - use these keys for win 10 pro and office 2016
 REM Install public KMS keys for auto activation
 cscript c:\windows\system32\slmgr.vbs /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX
-cscript 'c:\Program Files\Microsoft Office\Office16\ospp.vbs' /inpkey:XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99
+cscript "c:\Program Files\Microsoft Office\Office16\ospp.vbs" /inpkey:XQNVK-8JYDB-WJ9W3-YJ8YR-WFG99
 
 REM ---------- SCRATCH -------------------
 rem win 10 pro - W269N-WFGWX-YVC9B-4J6C9-T83GX
@@ -135,8 +135,9 @@ REM reg delete HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore /v Au
 
 
 REM Copy SetupComplete.cmd to c:\windows\setup\scripts\
-c:\windows\system32\takeown.exe /f ..
-c:\windows\system32\icacls.exe .. /grant Administrators:(OI)(CI)F /T
+echo Copying SetupComplete.cmd and ErrorHandler.cmd into c:\windows\setup\scripts folder...
+c:\windows\system32\takeown.exe /f .. 1>nul
+c:\windows\system32\icacls.exe .. /grant Administrators:(OI)(CI)F /T 1>nul
 mkdir c:\windows\setup\scripts
 copy %~dp0\SetupComplete.cmd c:\windows\setup\scripts\
 copy %~dp0\ErrorHandler.cmd c:\windows\setup\scripts\
@@ -147,7 +148,7 @@ echo - Edit c:\windows\system32\sysprep\actionfiles\generalize.xml
 echo - Comment out whole section on Appx (from <image to </image> )
 echo -----------------------------------------------------------------
 echo Auto apply fix to generalize.xml?
-choice /C yn /m "Press n for no, or y to auto fix"
+choice /C yn /T 6 /D y /m "Press n for no, or y to auto fix - default to Y in 6 seconds"
 if errorlevel 2 goto skipfixgeneralize
 c:\windows\system32\takeown.exe /f c:\windows\system32\sysprep\actionfiles
 c:\windows\system32\icacls.exe c:\windows\system32\sysprep\actionfiles /grant Administrators:(OI)(CI)F /T
