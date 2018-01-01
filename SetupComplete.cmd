@@ -29,19 +29,19 @@ rem make sure fog service is enabled
 sc config FOGService start=delayed-auto
 rem download and install the certs for the fog service
 echo Downloading Fog certs...
-..\sysprep_scripts\wget.exe -O srvpublic.crt http://fog.ed/fog/management/other/ssl/srvpublic.crt
-..\sysprep_scripts\wget.exe -O ca.cert.der http://fog.ed/fog/management/other/ca.cert.der
+..\sysprep_scripts\wget.exe -O ..\sysprep_scripts\srvpublic.crt http://fog.ed/fog/management/other/ssl/srvpublic.crt
+..\sysprep_scripts\wget.exe -O ..\sysprep_scripts\ca.cert.der http://fog.ed/fog/management/other/ca.cert.der
 
 rem install the certs
 echo Installing Fog certs...
 REM remove old certs
-certmgr.exe -del -c -n "FOG Project" -s -r localMachine Root
-certmgr.exe -del -c -n "FOG Server CA" -s -r localMachine Root
+..\sysprep_scripts\certmgr.exe -del -c -n "FOG Project" -s -r localMachine Root
+..\sysprep_scripts\certmgr.exe -del -c -n "FOG Server CA" -s -r localMachine Root
 
-certmgr.exe -add ca.cert.der -c -s -r localMachine root
-rem certmgr.exe -add ca.cert.der -c -s -r localMachine trustedpublisher
-certmgr.exe -add srvpublic.crt -c -s -r localMachine root
-rem certmgr.exe -add srvpublic.crt -c -s -r localMachine trustedpublisher
+..\sysprep_scripts\certmgr.exe -add ..\sysprep_scripts\ca.cert.der -c -s -r localMachine root
+rem ..\sysprep_scripts\certmgr.exe -add ca.cert.der -c -s -r localMachine trustedpublisher
+..\sysprep_scripts\certmgr.exe -add ..\sysprep_scripts\srvpublic.crt -c -s -r localMachine root
+rem ..\sysprep_scripts\certmgr.exe -add srvpublic.crt -c -s -r localMachine trustedpublisher
 
 net start FOGService
 
