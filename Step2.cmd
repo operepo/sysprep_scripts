@@ -150,9 +150,11 @@ echo -----------------------------------------------------------------
 echo Auto apply fix to generalize.xml?
 choice /C yn /T 6 /D y /m "Press n for no, or y to auto fix - default to Y in 6 seconds"
 if errorlevel 2 goto skipfixgeneralize
-c:\windows\system32\takeown.exe /f %windir%\system32\sysprep\actionfiles
-c:\windows\system32\icacls.exe %windir%\system32\sysprep\actionfiles /grant Administrators:(OI)(CI)F /T
-copy %~dp0\generalize.xml %windir%\system32\sysprep\actionfiles\generalize.xml
+c:\windows\system32\takeown.exe /R /f %windir%\system32\sysprep\actionfiles
+c:\windows\system32\icacls.exe %windir%\system32\sysprep\actionfiles /grant:r "Administrators:(OI)(CI)F" /T
+c:\windows\system32\icacls.exe %windir%\system32\sysprep\actionfiles\Generalize.xml /grant:r "Administrators:F" /T
+echo on
+copy %~dp0\Generalize.xml %windir%\system32\sysprep\actionfiles\Generalize.xml
 :skipfixgeneralize
 
 echo
