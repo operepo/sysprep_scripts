@@ -1,5 +1,5 @@
 REM Create SetupComplete.cmd (C:\Windows\Setup\Scripts\SetupComplete.cmd)
-echo Running SetupComplete.cmd
+echo Running - SetupComplete.cmd > %programdata%\ope\setupcomplete.log
 rem disable ipv6 - interferes w joining domains in some cases - set back to 0 to enable (windows default)
 rem reg add HKLM\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters /v DisabledComponents /t REG_DWORD /d 0xff /f
 
@@ -19,30 +19,15 @@ rem :skipreboot
 
 
 rem import app associations
-DISM /online /import-defaultappassociations:..\sysprep_scripts\AppAssoc.xml
+DISM /online /import-defaultappassociations:%windir%\setup\sysprep_scripts\AppAssoc.xml
 
 REM force KMS server activation for win/office
 cscript c:\windows\system32\slmgr.vbs /ato
 cscript c:\Program Files\Microsoft Office\Office16\ospp.vbs /act
 
-rem make sure fog service is enabled
-sc config FOGService start=delayed-auto
-rem download and install the certs for the fog service
-echo Downloading Fog certs...
-..\sysprep_scripts\wget.exe -O srvpublic.crt http://fog.ed/fog/management/other/ssl/srvpublic.crt
-..\sysprep_scripts\wget.exe -O ca.cert.der http://fog.ed/fog/management/other/ca.cert.der
+rem make sure fog service works
+%windir%\setup\sysprep_scripts\fix_fog_service.cmd
 
-rem install the certs
-echo Installing Fog certs...
-REM remove old certs
-certmgr.exe -del -c -n "FOG Project" -s -r localMachine Root
-certmgr.exe -del -c -n "FOG Server CA" -s -r localMachine Root
-
-certmgr.exe -add ca.cert.der -c -s -r localMachine root
-rem certmgr.exe -add ca.cert.der -c -s -r localMachine trustedpublisher
-certmgr.exe -add srvpublic.crt -c -s -r localMachine root
-rem certmgr.exe -add srvpublic.crt -c -s -r localMachine trustedpublisher
-
-net start FOGService
 
 echo SetupComplete.cmd Finished.
+echo Done - SetupComplete.cmd > %programdata%\ope\setupcomplete.log

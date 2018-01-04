@@ -6,7 +6,7 @@ powercfg /H off
 
 rem remove firstboot profile
 echo removing firstboot profile...
-wmic /node:localhost path win32_UserProfile where LocalPath="c:\\users\\firstboot" Delete 2>>c:\apps\sysprep_scripts\wmic.err
+wmic /node:localhost path win32_UserProfile where LocalPath="c:\\users\\firstboot" Delete 2>>%windir%\setup\sysprep_scripts\wmic.err
 
 rem delete shadow copies
 echo deleting shadow copies...
@@ -34,8 +34,8 @@ del /F "C:\fog.log"
 del /F "C:\Program Files (x86)\FOG\token.dat"
 
 
-echo Do you want to run disk cleanup [recommended - default Y in 6 seconds]?
-choice /C yn /T 6 /D y /M "Press y for yes, or n to skip"
+echo Do you want to run disk cleanup [recommended - default N in 6 seconds]?
+choice /C yn /T 6 /D n /M "Press y for yes, or n to skip"
 if errorlevel 2 goto skipdiskcleanup
 echo running disk cleanup...
 cleanmgr /sagerun:1
@@ -69,7 +69,7 @@ rem reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v AllowCo
 
 
 rem Export current app defaults so we can import them later
-DISM /online /export-defaultappassociations:AppAssoc.xml
+DISM /online /export-defaultappassociations:%windir%\setup\sysprep_scripts\AppAssoc.xml
 
 REM PC software - use these keys for win 10 pro and office 2016
 REM Install public KMS keys for auto activation
@@ -136,11 +136,11 @@ REM reg delete HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore /v Au
 
 REM Copy SetupComplete.cmd to c:\windows\setup\scripts\
 echo Copying SetupComplete.cmd and ErrorHandler.cmd into c:\windows\setup\scripts folder...
-c:\windows\system32\takeown.exe /f .. 1>nul
-c:\windows\system32\icacls.exe .. /grant Administrators:(OI)(CI)F /T 1>nul
-mkdir c:\windows\setup\scripts
-copy %~dp0\SetupComplete.cmd c:\windows\setup\scripts\
-copy %~dp0\ErrorHandler.cmd c:\windows\setup\scripts\
+c:\windows\system32\takeown.exe /f %windir%\setup 1>nul
+c:\windows\system32\icacls.exe %windir%\setup /grant Administrators:(OI)(CI)F /T 1>nul
+mkdir %windir%\setup\scripts
+copy %~dp0\SetupComplete.cmd %windir%\setup\scripts\
+copy %~dp0\ErrorHandler.cmd %windir%\setup\scripts\
 
 echo -----------------------------------------------------------------
 echo - NOTE - broken win 10 1709 - will fail on sysprep
@@ -150,9 +150,9 @@ echo -----------------------------------------------------------------
 echo Auto apply fix to generalize.xml?
 choice /C yn /T 6 /D y /m "Press n for no, or y to auto fix - default to Y in 6 seconds"
 if errorlevel 2 goto skipfixgeneralize
-c:\windows\system32\takeown.exe /f c:\windows\system32\sysprep\actionfiles
-c:\windows\system32\icacls.exe c:\windows\system32\sysprep\actionfiles /grant Administrators:(OI)(CI)F /T
-copy %~dp0\generalize.xml c:\windows\system32\sysprep\actionfiles\generalize.xml
+c:\windows\system32\takeown.exe /f %windir%\system32\sysprep\actionfiles
+c:\windows\system32\icacls.exe %windir%\system32\sysprep\actionfiles /grant Administrators:(OI)(CI)F /T
+copy %~dp0\generalize.xml %windir%\system32\sysprep\actionfiles\generalize.xml
 :skipfixgeneralize
 
 echo
@@ -164,5 +164,5 @@ echo "  DO NOT do anything during sysprep!!!"
 echo "  DO NOT start the machine back up - start your imaging process to capture after shutdown!!!"
 rem get current path for the unattend.xml file
 set upath=%~dp0unattend.xml
-c:\windows\system32\sysprep\sysprep.exe /oobe /generalize /shutdown /unattend:%upath%
+%windir%\system32\sysprep\sysprep.exe /oobe /generalize /shutdown /unattend:%upath%
 :skipsysprep
