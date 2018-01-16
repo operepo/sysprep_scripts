@@ -26,7 +26,7 @@ cscript c:\windows\system32\slmgr.vbs /ato
 cscript c:\Program Files\Microsoft Office\Office16\ospp.vbs /act
 
 rem make sure fog service works
-%windir%\setup\sysprep_scripts\fix_fog_service.cmd
+call %windir%\setup\sysprep_scripts\fix_fog_service.cmd
 
 
 echo SetupComplete.cmd Finished.
