@@ -1,0 +1,54 @@
+
+--- General
+rotate logs
+Network Backend - LDAP
+
+--- Service
+Enable firewall
+Buildint VNC (all options on)
+
+--- Master
+User Config: h:\Config
+Screenshots: h:\Screenshots
+
+Double Click: Remote View
+
+--- Authentication
+Turn off key file
+Turn on logon auth
+
+-- Access Control
+Data Backend - LDAP
+Enable Usage of Domain Groups - On
+Restrict access to members of groups
+CN=Administraotrs,CN=Builtin
+CN=Domain Admins,CN=Users
+CN=Faculty,OU=FacultyGroups
+
+--- LDAP - Basic Settings
+Ldap Server: pencol.local
+Bind credentials on
+Bind DN: CN=Veyon Service,CN=Users,DC=pencol,DC=local
+Bind PW: ????
+
+Discover base DN on
+
+--- LDAP - Environment Settings
+Computer Tree: CN=Computers
+Perform recursive search on
+
+user Login Attrib: sAMAccountName
+Group Member atrrib: member
+Computer Host Name: dNSHostName
+Host name as FQDN on
+computer room attrib: Location
+Computer room name attrib: blank
+
+--- LDAP - Advanced Settings
+Filter Users: objectClass=person
+Filter user groups: objectClass=group
+Filter Computers: objectClass=computer
+Filter Computer Groups: objectClass=group
+
+Distinguished name on
+Computer room attribute in computer objects on  (set Location on computers)
