@@ -28,6 +28,8 @@ cscript c:\Program Files\Microsoft Office\Office16\ospp.vbs /act
 rem make sure fog service works
 call %windir%\setup\sysprep_scripts\fix_fog_service.cmd
 
+rem add OPE services cert to trusted list
+call %windir%\setup\sysprep_scripts\trust_ope_certs.cmd
 
 echo SetupComplete.cmd Finished.
 echo Done - SetupComplete.cmd > %programdata%\ope\setupcomplete.log
