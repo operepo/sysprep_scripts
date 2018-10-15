@@ -2,3 +2,5 @@
 /srvpublic.crt
 
 wmic.err
+/AppAssoc.xml
+/ca.crt

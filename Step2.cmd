@@ -33,6 +33,22 @@ del /F "C:\Program Files (x86)\FOG\fog.log"
 del /F "C:\fog.log"
 del /F "C:\Program Files (x86)\FOG\token.dat"
 
+rem -- CLEAR TEMP FOLDERS --
+echo Do you want to cleanup temp folders [recommended - default N in 6 seconds]?
+choice /C yn /T 6 /D n /M "Press y for yes, or n to skip"
+if errorlevel 2 goto skipcleartempfolders
+
+echo Clearing temp folders...
+echo -- Clearing Oculus Staging folder...
+rd "C:\Program Files\Oculus\Staging\" /Q /S > nul
+echo -- Clearing out Windows\Installer folder with patch cleaner...
+"C:\Program Files (x86)\HomeDev\PatchCleaner\PatchCleaner.exe" /d
+echo -- Running Dism to clean up winsxs folder...
+Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
+Dism.exe /online /Cleanup-Image /SPSuperseded
+
+:skipcleartempfolders
+
 
 echo Do you want to run disk cleanup [recommended - default N in 6 seconds]?
 choice /C yn /T 6 /D n /M "Press y for yes, or n to skip"
