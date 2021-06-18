@@ -31,5 +31,8 @@ call %windir%\setup\sysprep_scripts\fix_fog_service.cmd
 rem add OPE services cert to trusted list
 call %windir%\setup\sysprep_scripts\trust_ope_certs.cmd
 
+rem Make sure the partition fills the disk
+call %windir%\setup\sysprep_scripts\extend_partition.cmd
+
 echo SetupComplete.cmd Finished.
 echo Done - SetupComplete.cmd > %programdata%\ope\setupcomplete.log

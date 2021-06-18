@@ -17,6 +17,8 @@ choice /C yn /T 6 /D n /M "Press y for yes, or n to skip"
 if errorlevel 2 goto skipappxremoval
 echo uninstalling apps we don't want...
 
+rem https://github.com/Sycnex/Windows10Debloater (more examples here)
+
 SET keep_apps="appconnector", "appinstaller", "alarms", "communicationsapps", "feedback", "getstarted", "skypeapp", "zunemusic", "zune", "maps", "messaging", "wallet", "connectivitystore", "bing", "zunevideo", "onenote", "oneconnect", "people", "commsphone", "windowsphone", "phone", "sticky", "sway", "xboxcomp", "calculator", "solitaire", "mspaint", "photos", "3d", "soundrecorder", "holographic", "windowsstore"
 SET uninstall_apps="3dbuilder", "alarms", "camera", "officehub", "bingfinance", "bingnews", "bingsports", "bingweather"
 
