@@ -166,7 +166,7 @@ echo - Edit c:\windows\system32\sysprep\actionfiles\generalize.xml
 echo - Comment out whole section on Appx (from <image to </image> )
 echo -----------------------------------------------------------------
 echo Auto apply fix to generalize.xml?
-choice /C yn /T 6 /D n /m "Press n for no, or y to auto fix - default to Y in 6 seconds"
+choice /C yn /T 6 /D y /m "Press n for no, or y to auto fix - default to Y in 6 seconds"
 if errorlevel 2 goto skipfixgeneralize
 c:\windows\system32\takeown.exe /R /f %windir%\system32\sysprep\actionfiles
 c:\windows\system32\icacls.exe %windir%\system32\sysprep\actionfiles /grant:r "Administrators:(OI)(CI)F" /T
