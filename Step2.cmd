@@ -23,7 +23,7 @@ del /F c:\windows\system32\sysprep\panther\setupact.log
 del /F c:\windows\system32\sysprep\panther\setuperr.log
 del /F c:\windows\system32\sysprep\panther\ie\setupact.log
 del /F c:\windows\system32\sysprep\panther\ie\setuperr.log
-del /F c:\windows\system32\sysprep\panther\*
+del /F /Q c:\windows\system32\sysprep\panther\*
 
 echo disabling FOGService during sysprep...
 rem turn off fog service during clone
@@ -153,9 +153,9 @@ REM reg delete HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore /v Au
 REM Make sure we remove error entries from before
 reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\Sysprep" /v "SysprepCorrupt" /f
 REM Set sysprep states properly
-reg add "HKEY_LOCAL_MACHINE\System\Setup\Status\SysprepStatus" /v "CleanupState" /t REG_DWORD /d 2
-reg add "HKEY_LOCAL_MACHINE\System\Setup\Status\SysprepStatus" /v "GeneralizationState" /t REG_DWORD /d 2
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsNT\CurrentVersion\SoftwareProtectionPlatform" /v "SkipRearm" /t REG_DWORD /d 1
+reg add "HKEY_LOCAL_MACHINE\System\Setup\Status\SysprepStatus" /v "CleanupState" /t REG_DWORD /d 2 /f
+reg add "HKEY_LOCAL_MACHINE\System\Setup\Status\SysprepStatus" /v "GeneralizationState" /t REG_DWORD /d 2 /f
+reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsNT\CurrentVersion\SoftwareProtectionPlatform" /v "SkipRearm" /t REG_DWORD /d 1 /f
 
 REM reinstall mstdc
 c:\windows\system32\msdtc.exe –uninstall
@@ -191,10 +191,15 @@ echo "Clean windows store and store apps?"
 echo
 choice /C yn /T 6 /D y /m "Press n for no, or y to clean store apps - default Y in 6 seconds"
 if errorlevel 2 goto skipcleanapps
-PowerShell -Command "Get-AppxProvisionedPackage –online | Remove-AppxProvisionedPackage -online"
-PowerShell -Command "Get-AppxPackage –AllUsers | Remove-AppxPackage"
+PowerShell -Command "& {Get-AppxProvisionedPackage –online | Remove-AppxProvisionedPackage -online}"
+PowerShell -Command "& {Get-AppxPackage –AllUsers | Remove-AppxPackage}"
 :skipcleanapps
 
+echo
+echo
+echo "NOTE: You may need to remove empty c:\windows\system32\inetsrv"
+rem del /F /S /Q c:\windows\system32\inetsrv
+echo
 echo
 echo "This will run sysprep and shutdown."
 echo Do you want to run sysprep [recommended]?
