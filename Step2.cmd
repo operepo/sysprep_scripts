@@ -181,8 +181,8 @@ echo "Clean windows store and store apps?"
 echo
 choice /C yn /T 6 /D y /m "Press n for no, or y to clean store apps - default Y in 6 seconds"
 if errorlevel 2 goto skipcleanapps
-PowerShell -Command Get-AppxProvisionedPackage –online | Remove-AppxProvisionedPackage -online
-PowerShell -Command Get-AppxPackage –AllUsers | Remove-AppxPackage
+PowerShell -Command "Get-AppxProvisionedPackage –online | Remove-AppxProvisionedPackage -online"
+PowerShell -Command "Get-AppxPackage –AllUsers | Remove-AppxPackage"
 :skipcleanapps
 
 echo
