@@ -23,6 +23,7 @@ del /F c:\windows\system32\sysprep\panther\setupact.log
 del /F c:\windows\system32\sysprep\panther\setuperr.log
 del /F c:\windows\system32\sysprep\panther\ie\setupact.log
 del /F c:\windows\system32\sysprep\panther\ie\setuperr.log
+del /F c:\windows\system32\sysprep\panther\*
 
 echo disabling FOGService during sysprep...
 rem turn off fog service during clone
@@ -151,6 +152,15 @@ REM reg delete HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore /v Au
 
 REM Make sure we remove error entries from before
 reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\Sysprep" /v "SysprepCorrupt" /f
+REM Set sysprep states properly
+reg add "HKEY_LOCAL_MACHINE\System\Setup\Status\SysprepStatus" /v "CleanupState" /t REG_DWORD /d 2
+reg add "HKEY_LOCAL_MACHINE\System\Setup\Status\SysprepStatus" /v "GeneralizationState" /t REG_DWORD /d 2
+reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\WindowsNT\CurrentVersion\SoftwareProtectionPlatform" /v "SkipRearm" /t REG_DWORD /d 1
+
+REM reinstall mstdc
+c:\windows\system32\msdtc.exe –uninstall
+c:\windows\system32\msdtc.exe –install
+
 
 REM Copy SetupComplete.cmd to c:\windows\setup\scripts\
 echo Copying SetupComplete.cmd and ErrorHandler.cmd into c:\windows\setup\scripts folder...
@@ -196,3 +206,4 @@ rem get current path for the unattend.xml file
 set upath=%~dp0unattend.xml
 %windir%\system32\sysprep\sysprep.exe /oobe /generalize /shutdown /unattend:%upath%
 :skipsysprep
+
