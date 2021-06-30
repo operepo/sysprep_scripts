@@ -176,6 +176,16 @@ copy %~dp0\Generalize.xml %windir%\system32\sysprep\actionfiles\Generalize.xml
 :skipfixgeneralize
 
 echo
+echo
+echo "Clean windows store and store apps?"
+echo
+choice /C yn /T 6 /D y /m "Press n for no, or y to clean store apps - default Y in 6 seconds"
+if errorlevel 2 goto skipcleanapps
+PowerShell -Command Get-AppxProvisionedPackage –online | Remove-AppxProvisionedPackage -online
+PowerShell -Command Get-AppxPackage –AllUsers | Remove-AppxPackage
+:skipcleanapps
+
+echo
 echo "This will run sysprep and shutdown."
 echo Do you want to run sysprep [recommended]?
 choice /C yn /m "Press n for no, or y to run sysprep"

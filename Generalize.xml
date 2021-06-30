@@ -120,10 +120,10 @@
 <deleteKey path="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TPM\WMI\User"></deleteKey>
 <deleteKey path="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TPM\KeyAttestationKeys"></deleteKey>
 <deleteKey path="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TPM\PlatformQuoteKeys"></deleteKey>
-<deleteKey path="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TPM\ODUID"></deleteKey></registryActions></imaging><imaging exclude=""><assemblyIdentity name="Microsoft-Windows-AppX-Sysprep" version="10.0.18362.1316" publicKeyToken="31bf3856ad364e35" processorArchitecture="amd64" versionScope="NonSxS"></assemblyIdentity>
+<deleteKey path="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TPM\ODUID"></deleteKey></registryActions></imaging><!--imaging exclude=""><assemblyIdentity name="Microsoft-Windows-AppX-Sysprep" version="10.0.18362.1316" publicKeyToken="31bf3856ad364e35" processorArchitecture="amd64" versionScope="NonSxS"></assemblyIdentity>
 <sysprepOrder order="0x1A00"></sysprepOrder>
 <sysprepValidate methodName="SysprepGeneralizeValidate" moduleName="$(runtime.system32)\AppxSysprep.dll"></sysprepValidate>
-<sysprepModule methodName="SysprepGeneralize" moduleName="$(runtime.system32)\AppxSysprep.dll"></sysprepModule></imaging><imaging exclude=""><assemblyIdentity name="Microsoft-Windows-Provisioning-Sysprep" version="10.0.18362.1316" publicKeyToken="31bf3856ad364e35" processorArchitecture="amd64" versionScope="NonSxS"></assemblyIdentity>
+<sysprepModule methodName="SysprepGeneralize" moduleName="$(runtime.system32)\AppxSysprep.dll"></sysprepModule></imaging--><imaging exclude=""><assemblyIdentity name="Microsoft-Windows-Provisioning-Sysprep" version="10.0.18362.1316" publicKeyToken="31bf3856ad364e35" processorArchitecture="amd64" versionScope="NonSxS"></assemblyIdentity>
 <sysprepOrder order="0x3600"></sysprepOrder>
 <sysprepModule methodName="ProvPackageSysprepGeneralize" moduleName="$(runtime.system32)\ProvSysprep.dll"></sysprepModule></imaging><imaging exclude=""><assemblyIdentity name="Microsoft-Windows-Shell-Setup" version="10.0.18362.1316" publicKeyToken="31bf3856ad364e35" processorArchitecture="wow64" versionScope="NonSxS"></assemblyIdentity>
 <sysprepOrder order="0x1000"></sysprepOrder>
