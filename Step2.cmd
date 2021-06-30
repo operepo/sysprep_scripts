@@ -149,6 +149,8 @@ REM ---------- SCRATCH -------------------
 rem allow win store apps to update again
 REM reg delete HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\WindowsStore /v AutoDownload /f
 
+REM Make sure we remove error entries from before
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\Sysprep" /v "SysprepCorrupt" /f
 
 REM Copy SetupComplete.cmd to c:\windows\setup\scripts\
 echo Copying SetupComplete.cmd and ErrorHandler.cmd into c:\windows\setup\scripts folder...
@@ -164,7 +166,7 @@ echo - Edit c:\windows\system32\sysprep\actionfiles\generalize.xml
 echo - Comment out whole section on Appx (from <image to </image> )
 echo -----------------------------------------------------------------
 echo Auto apply fix to generalize.xml?
-choice /C yn /T 6 /D y /m "Press n for no, or y to auto fix - default to Y in 6 seconds"
+choice /C yn /T 6 /D n /m "Press n for no, or y to auto fix - default to Y in 6 seconds"
 if errorlevel 2 goto skipfixgeneralize
 c:\windows\system32\takeown.exe /R /f %windir%\system32\sysprep\actionfiles
 c:\windows\system32\icacls.exe %windir%\system32\sysprep\actionfiles /grant:r "Administrators:(OI)(CI)F" /T
