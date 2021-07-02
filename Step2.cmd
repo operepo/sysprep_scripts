@@ -199,6 +199,9 @@ PowerShell -Command "Get-AppxPackage -AllUsers | Remove-AppxPackage"
 rem kill tasklist /svc /fi "services eq StateRepository"
 net stop StateRepository
 rem Make sure this folder is gone
+c:\windows\system32\takeown.exe /R /f c:\windows\system32\inetsrv
+c:\windows\system32\icacls.exe c:\windows\system32\inetsrv /grant:r "Administrators:(OI)(CI)F" /T
+c:\windows\system32\icacls.exe c:\windows\system32\inetsrv /grant:r "Administrators:F" /T
 rd /s /q c:\windows\system32\inetsrv
 rem clean up app store apps
 c:\windows\system32\takeown.exe /R /f "c:\program files\WindowsApps"
