@@ -23,7 +23,7 @@ del /F c:\windows\system32\sysprep\panther\setupact.log
 del /F c:\windows\system32\sysprep\panther\setuperr.log
 del /F c:\windows\system32\sysprep\panther\ie\setupact.log
 del /F c:\windows\system32\sysprep\panther\ie\setuperr.log
-rd /q /s c:\windows\system32\sysprep\panther\*
+del /F /Q c:\windows\system32\sysprep\panther\*
 
 echo disabling FOGService during sysprep...
 rem turn off fog service during clone
@@ -191,14 +191,26 @@ echo "Clean windows store and store apps?"
 echo
 choice /C yn /T 6 /D y /m "Press n for no, or y to clean store apps - default Y in 6 seconds"
 if errorlevel 2 goto skipcleanapps
-PowerShell -Command "& {Get-AppxProvisionedPackage –online | Remove-AppxProvisionedPackage -online}"
-PowerShell -Command "& {Get-AppxPackage –AllUsers | Remove-AppxPackage}"
+rem PowerShell -Command "& {Get-AppxProvisionedPackage –online | Remove-AppxProvisionedPackage -online}"
+PowerShell -Command "Get-AppxProvisionedPackage –online | Remove-AppxProvisionedPackage -online"
+PowerShell -Command "Get-AppxPackage –AllUsers | Remove-AppxPackage"
 :skipcleanapps
 
-echo
-echo
-echo "NOTE: You may need to remove empty c:\windows\system32\inetsrv"
-rem del /F /S /Q c:\windows\system32\inetsrv
+rem kill tasklist /svc /fi "services eq StateRepository"
+net stop StateRepository
+rem Make sure this folder is gone
+rd /s /q c:\windows\system32\inetsrv
+rem clean up app store apps
+c:\windows\system32\takeown.exe /R /f "c:\program files\WindowsApps"
+c:\windows\system32\icacls.exe "c:\program files\WindowsApps" /grant:r "Administrators:(OI)(CI)F" /T
+c:\windows\system32\icacls.exe "c:\program files\WindowsApps" /grant:r "Administrators:F" /T
+rd /s /q "c:\program files\WindowsApps\*"
+
+c:\windows\system32\takeown.exe /R /f "c:\ProgramData\Microsoft\Windows\AppRepository"
+c:\windows\system32\icacls.exe "c:\ProgramData\Microsoft\Windows\AppRepository" /grant:r "Administrators:(OI)(CI)F" /T
+c:\windows\system32\icacls.exe "c:\ProgramData\Microsoft\Windows\AppRepository" /grant:r "Administrators:F" /T
+rd /s /q "c:\ProgramData\Microsoft\Windows\AppRepository\*"
+
 echo
 echo
 echo "This will run sysprep and shutdown."
