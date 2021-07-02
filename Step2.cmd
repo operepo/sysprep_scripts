@@ -192,8 +192,8 @@ echo
 choice /C yn /T 6 /D y /m "Press n for no, or y to clean store apps - default Y in 6 seconds"
 if errorlevel 2 goto skipcleanapps
 rem PowerShell -Command "& {Get-AppxProvisionedPackage –online | Remove-AppxProvisionedPackage -online}"
-PowerShell -Command "Get-AppxProvisionedPackage –online | Remove-AppxProvisionedPackage -online"
-PowerShell -Command "Get-AppxPackage –AllUsers | Remove-AppxPackage"
+PowerShell -Command "Get-AppxProvisionedPackage -Online | Remove-AppxProvisionedPackage -Online"
+PowerShell -Command "Get-AppxPackage -AllUsers | Remove-AppxPackage"
 :skipcleanapps
 
 rem kill tasklist /svc /fi "services eq StateRepository"
@@ -204,12 +204,13 @@ rem clean up app store apps
 c:\windows\system32\takeown.exe /R /f "c:\program files\WindowsApps"
 c:\windows\system32\icacls.exe "c:\program files\WindowsApps" /grant:r "Administrators:(OI)(CI)F" /T
 c:\windows\system32\icacls.exe "c:\program files\WindowsApps" /grant:r "Administrators:F" /T
-rd /s /q "c:\program files\WindowsApps\*"
+rd /s /q "c:\program files\WindowsApps"
 
 c:\windows\system32\takeown.exe /R /f "c:\ProgramData\Microsoft\Windows\AppRepository"
 c:\windows\system32\icacls.exe "c:\ProgramData\Microsoft\Windows\AppRepository" /grant:r "Administrators:(OI)(CI)F" /T
 c:\windows\system32\icacls.exe "c:\ProgramData\Microsoft\Windows\AppRepository" /grant:r "Administrators:F" /T
-rd /s /q "c:\ProgramData\Microsoft\Windows\AppRepository\*"
+net stop StateRepository
+rd /s /q "c:\ProgramData\Microsoft\Windows\AppRepository"
 
 echo
 echo
